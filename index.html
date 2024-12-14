@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>할 일 목록</title>
+    
+    <!-- 210옴니고딕 폰트 추가 -->
+    <link href="https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2312-1@1.1/210OmniGothic.woff2" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="stats-container">
+        <div class="stats-header">
+            <h3>통계 및 성취도</h3>
+            <div class="stats-actions">
+                <button onclick="showGoalSettings()" class="stats-toggle" title="목표 설정">
+                    <i class="fas fa-cog"></i>
+                </button>
+                <button onclick="toggleStats()" class="stats-toggle" title="통계 보기/숨기기">
+                    <i class="fas fa-chart-bar"></i>
+                </button>
+            </div>
+        </div>
+        
+        <!-- 캐릭터와 보상 시스템을 통계 컨테이너 안으로 이동 -->
+        <div class="stats-content-wrapper">
+            <div class="character-container">
+                <div class="character-info">
+                    <div class="character-avatar">
+                        <span id="characterEmoji">🤖</span>
+                        <div class="level-badge">Level <span id="characterLevel">1</span></div>
+                    </div>
+                    <div class="exp-bar-container">
+                        <div class="exp-bar">
+                            <div id="expProgress" class="exp-progress"></div>
+                        </div>
+                        <span class="exp-text">경험치: <span id="currentExp">0</span>/<span id="maxExp">100</span></span>
+                    </div>
+                </div>
+                <div id="praiseMessage" class="praise-message"></div>
+            </div>
+
+            <div id="statsContent" class="stats-content" style="display: grid;">
+                <!-- 여기에 통계가 표시됩니다 -->
+            </div>
+        </div>
+    </div>
+
+    <div class="main-container">
+        <div class="calendar-container">
+            <div class="calendar-header">
+                <button onclick="prevMonth()" class="month-btn">&lt;</button>
+                <h2 id="monthDisplay"></h2>
+                <button onclick="nextMonth()" class="month-btn">&gt;</button>
+            </div>
+            <table class="calendar">
+                <thead>
+                    <tr>
+                        <th>월</th>
+                        <th>화</th>
+                        <th>수</th>
+                        <th>목</th>
+                        <th>금</th>
+                        <th>토</th>
+                        <th>일</th>
+                    </tr>
+                </thead>
+                <tbody id="calendarBody"></tbody>
+            </table>
+        </div>
+        
+        <div class="todo-container">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <h1>To Do List</h1>
+                <div class="date-display" id="selectedDate"></div>
+            </div>
+            <div class="input-group">
+                <input type="text" 
+                       id="todoInput" 
+                       placeholder="할 일을 입력하세요"
+                       onkeypress="if(event.keyCode==13) { addTodo(); return false; }">
+                <button onclick="addTodo()">추가</button>
+            </div>
+            <ul id="todoList"></ul>
+        </div>
+    </div>
+
+    <div class="weekly-view">
+        <div class="weekly-header">
+            <h2>Weekly Planner</h2>
+            <button onclick="printWeeklyTodos()" class="print-btn" title="인쇄하기">
+                <i class="fas fa-print"></i> 인쇄
+            </button>
+        </div>
+        <div class="weekly-content">
+            <table class="weekly-table">
+                <tbody id="weeklyTodos"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <div id="goalSettingsModal" class="modal">
+        <div class="modal-content">
+            <h2>목표 설정</h2>
+            <div class="goal-setting">
+                <label>일일 목표</label>
+                <input type="number" id="dailyGoal" min="1" value="3">
+            </div>
+            <div class="goal-setting">
+                <label>주간 목표</label>
+                <input type="number" id="weeklyGoal" min="1" value="15">
+            </div>
+            <div class="goal-setting">
+                <label>월간 목표</label>
+                <input type="number" id="monthlyGoal" min="1" value="50">
+            </div>
+            <div class="modal-buttons">
+                <button onclick="saveGoals()">저장</button>
+                <button onclick="closeGoalSettings()">취소</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html> 
