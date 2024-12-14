@@ -684,8 +684,8 @@ function isSameWeek(date1, date2) {
 
 // 통계 토글 함수
 function toggleStats() {
-    const statsContent = document.getElementById('statsContent');
-    statsContent.style.display = statsContent.style.display === 'none' ? 'grid' : 'none';
+    const statsContentWrapper = document.querySelector('.stats-content-wrapper');
+    statsContentWrapper.style.display = statsContentWrapper.style.display === 'none' ? 'flex' : 'none';
 }
 
 function resetAllTodos() {
