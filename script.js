@@ -703,50 +703,6 @@ function resetAllTodos() {
     updateStats();
 }
 
-function showGoalSettings() {
-    const modal = document.getElementById('goalSettingsModal');
-    document.getElementById('dailyGoal').value = goals.daily.count;
-    document.getElementById('weeklyGoal').value = goals.weekly.count;
-    document.getElementById('monthlyGoal').value = goals.monthly.count;
-    modal.style.display = 'block';
-}
-
-function closeGoalSettings() {
-    document.getElementById('goalSettingsModal').style.display = 'none';
-}
-
-function saveGoals() {
-    goals = {
-        daily: { 
-            count: parseInt(document.getElementById('dailyGoal').value), 
-            reward: '🌟' 
-        },
-        weekly: { 
-            count: parseInt(document.getElementById('weeklyGoal').value), 
-            reward: '🏆' 
-        },
-        monthly: { 
-            count: parseInt(document.getElementById('monthlyGoal').value), 
-            reward: '👑' 
-        }
-    };
-    
-    // 목표 저장
-    localStorage.setItem('goals', JSON.stringify(goals));
-    
-    // UI 업데이트
-    updateStats();
-    closeGoalSettings();
-}
-
-// 모달 외부 클릭 시 닫기
-window.onclick = function(event) {
-    const modal = document.getElementById('goalSettingsModal');
-    if (event.target === modal) {
-        closeGoalSettings();
-    }
-}
-
 function printWeeklyTodos() {
     const printWindow = window.open('', '_blank');
     const today = new Date(selectedDateStr);
