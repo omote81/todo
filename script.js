@@ -42,7 +42,7 @@ const lunarHolidays2024 = {
 // 요일 배열
 const WEEKDAYS = ['월', '화', '수', '목', '금', '토', '일'];
 
-// 페이지 로드 시 이벤트 리스너 수정
+// 페이지 로드 시 ���벤트 리스너 수정
 window.addEventListener('load', () => {
     console.log('Page loaded');
     const today = new Date();
@@ -160,7 +160,7 @@ function renderCalendar() {
     const firstDay = new Date(year, month, 1);
     const lastDay = new Date(year, month + 1, 0);
     
-    // 월요일을 1, 일요��을 7로 변환
+    // 월요일을 1, 일요을 7로 변환
     let startingDay = firstDay.getDay();
     startingDay = startingDay === 0 ? 6 : startingDay - 1;
     
@@ -317,7 +317,7 @@ function saveTodos() {
     // 현재 선택된 날짜의 할 일 목록 저장
     todosByDate[selectedDateStr] = todos;
     
-    // localStorage에 전체 데이터 저장
+    // localStorage에 전체 데이터 ��장
     localStorage.setItem('todosByDate', JSON.stringify(todosByDate));
     
     // UI 업데이트
@@ -418,13 +418,30 @@ function toggleCancel(button) {
     const todoItem = button.closest('.todo-item');
     const todoText = todoItem.querySelector('.todo-text');
     const icon = button.querySelector('i');
+    const smileIcon = todoItem.querySelector('.smile-icon');
     
     if (icon.classList.contains('fa-ban')) {
+        // 할 일 취소 시
         todoText.classList.add('canceled-text');
         icon.classList.remove('fa-ban');
         icon.classList.add('fa-undo');
         button.title = '취소해제';
+        
+        // 완료된 할 일인 경우 경험치 감소
+        if (smileIcon && smileIcon.textContent === '😊') {
+            characterSystem.removeExp(10);
+            characterSystem.showPraise('할 일을 취소했어... 다음엔 더 잘할 수 있을 거야! 💪');
+            
+            // 완료 표시도 제거
+            smileIcon.textContent = '';
+            const completeBtn = todoItem.querySelector('.complete-btn');
+            const completeIcon = completeBtn.querySelector('i');
+            completeIcon.classList.remove('fa-times-circle');
+            completeIcon.classList.add('fa-check-circle');
+            completeBtn.title = '완료';
+        }
     } else {
+        // 취소 해제 시
         todoText.classList.remove('canceled-text');
         icon.classList.remove('fa-undo');
         icon.classList.add('fa-ban');
@@ -432,6 +449,7 @@ function toggleCancel(button) {
     }
     
     saveTodos();
+    checkAllTodosComplete();
     updateStats();
 }
 
@@ -950,7 +968,7 @@ const Todo = {
     date: String,         // 날짜
     completed: Boolean,   // 완료 
     canceled: Boolean,    // 취소 여부
-    createdAt: Date,      // 생성일시
+    createdAt: Date,      // 생성일���
     updatedAt: Date       // 수정일시
 };
 
