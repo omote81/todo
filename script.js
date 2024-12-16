@@ -160,7 +160,7 @@ function renderCalendar() {
     const firstDay = new Date(year, month, 1);
     const lastDay = new Date(year, month + 1, 0);
     
-    // 월요일을 1, 일요일을 7로 변환
+    // 월요일을 1, 일요��을 7로 변환
     let startingDay = firstDay.getDay();
     startingDay = startingDay === 0 ? 6 : startingDay - 1;
     
@@ -437,6 +437,15 @@ function toggleCancel(button) {
 
 function deleteTodo(button) {
     const li = button.closest('li');
+    const todoItem = li.querySelector('.todo-item');
+    const smileIcon = todoItem.querySelector('.smile-icon');
+    
+    // 완료된 할 일인 경우 경험치 감소
+    if (smileIcon && smileIcon.textContent === '😊') {
+        characterSystem.removeExp(10); // 완료된 할 일 삭제 시 10 경험치 감소
+        characterSystem.showPraise('할 일을 삭제했어... 😢');
+    }
+    
     li.remove();
     saveTodos();
     checkAllTodosComplete();
@@ -1066,6 +1075,20 @@ class CharacterSystem {
             20: { emoji: '🐉', message: '전설의 드래곤이 되었어!' }
         };
         
+        // 레벨별 캐릭터 진화 단계 정의
+        this.evolutionStages = {
+            1: { emoji: '🥚', name: '알', message: '새로운 시작이야! 화이팅! 🌱' },
+            3: { emoji: '🐣', name: '병아리', message: '앗! 알에서 깨어났어! 🎉' },
+            5: { emoji: '🐥', name: '성장하는 병아리', message: '쑥쑥 자라나고 있어! 💪' },
+            7: { emoji: '🐤', name: '튼튼한 병아리', message: '더욱 튼튼해졌어! ⭐' },
+            10: { emoji: '🐔', name: '닭', message: '와! 멋진 닭이 되었어! 🌟' },
+            13: { emoji: '🦅', name: '독수리', message: '대단해! 하늘을 날 수 있게 되었어! ✨' },
+            15: { emoji: '🦚', name: '공작새', message: '와우! 아름다운 공작새가 되었어! 🎨' },
+            18: { emoji: '🦄', name: '유니콘', message: '믿을 수 없어! 전설의 유니콘이 되었어! 🌈' },
+            20: { emoji: '🐉', name: '드래곤', message: '축하해! 전설의 드래곤으로 진화했어! 🔥' },
+            25: { emoji: '✨🐉✨', name: '빛나는 드래곤', message: '최고의 경지에 도달했어! 넌 정말 대단해! 👑' }
+        };
+
         this.loadProgress();
         this.updateDisplay();
     }
@@ -1084,37 +1107,52 @@ class CharacterSystem {
         this.exp = 0;
         this.maxExp = this.level * 100;
         
-        // 레벨업 효과
-        this.showLevelUpAnimation();
-        this.showPraise(this.characters[this.level]?.message || '레벨업! 정말 대단해! 🎉');
-        
-        // 캐릭터 변경 체크
-        if (this.characters[this.level]) {
-            this.character = this.characters[this.level].emoji;
+        // 레벨업 시 진화 체크
+        const newStage = this.getCurrentEvolutionStage();
+        if (newStage) {
+            this.character = newStage.emoji;
+            this.showEvolutionAnimation();
+            this.showPraise(newStage.message);
+        } else {
+            this.showPraise(`레벨 ${this.level} 달성! 계속 힘내! 🎉`);
         }
-    }
-
-    showPraise(message) {
-        const praiseEl = document.getElementById('praiseMessage');
-        praiseEl.textContent = message;
-        praiseEl.classList.add('show');
         
-        setTimeout(() => {
-            praiseEl.classList.remove('show');
-        }, 3000);
+        this.saveProgress();
+        this.updateDisplay();
     }
 
-    showLevelUpAnimation() {
+    getCurrentEvolutionStage() {
+        // 현재 레벨에 해당하는 진화 단계 찾기
+        const stages = Object.entries(this.evolutionStages)
+            .sort(([a], [b]) => Number(b) - Number(a));
+        
+        for (const [level, stage] of stages) {
+            if (this.level >= Number(level)) {
+                return stage;
+            }
+        }
+        return this.evolutionStages[1]; // 기본 단계
+    }
+
+    showEvolutionAnimation() {
         const characterEl = document.getElementById('characterEmoji');
-        characterEl.classList.add('level-up');
-        setTimeout(() => {
-            characterEl.classList.remove('level-up');
-        }, 500);
+        characterEl.style.animation = 'none';
+        characterEl.offsetHeight; // 리플로우 강제
+        characterEl.style.animation = 'evolution 1.5s ease';
+        
+        // 진화 효과음 재생 (선택사항)
+        const evolutionSound = new Audio('evolution-sound.mp3'); // 효과음 파일 필요
+        evolutionSound.play().catch(() => {}); // 브라우저 정책상 자동 재생이 차단될 수 있음
     }
 
     updateDisplay() {
-        document.getElementById('characterEmoji').textContent = this.character;
-        document.getElementById('characterLevel').textContent = this.level;
+        const stage = this.getCurrentEvolutionStage();
+        const characterEl = document.getElementById('characterEmoji');
+        const levelEl = document.getElementById('characterLevel');
+        
+        characterEl.textContent = stage.emoji;
+        levelEl.textContent = `${this.level} (${stage.name})`;
+        
         document.getElementById('currentExp').textContent = this.exp;
         document.getElementById('maxExp').textContent = this.maxExp;
         document.getElementById('expProgress').style.width = `${(this.exp / this.maxExp) * 100}%`;
@@ -1153,6 +1191,16 @@ class CharacterSystem {
         }
         this.saveProgress();
         this.updateDisplay();
+    }
+
+    showPraise(message) {
+        const praiseEl = document.getElementById('praiseMessage');
+        praiseEl.textContent = message;
+        praiseEl.classList.add('show');
+        
+        setTimeout(() => {
+            praiseEl.classList.remove('show');
+        }, 3000);
     }
 }
 
