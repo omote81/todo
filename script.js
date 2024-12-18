@@ -3,18 +3,10 @@ let selectedDateStr = '';
 let currentDate = new Date();
 
 // 상수 정의
-const priorities = {
-    HIGH: { name: '높음', color: '#f44336', icon: '⚡' },
-    MEDIUM: { name: '중간', color: '#ff9800', icon: '⭐' },
-    LOW: { name: '낮음', color: '#4caf50', icon: '🌱' }
-};
+
 
 // goals를 localStorage에서 가져오도록 수정
-let goals = JSON.parse(localStorage.getItem('goals')) || {
-    daily: { count: 3, reward: '🌟' },
-    weekly: { count: 15, reward: '🏆' },
-    monthly: { count: 50, reward: '👑' }
-};
+
 
 // 공휴일 데이터
 const holidays = {
@@ -42,7 +34,7 @@ const lunarHolidays2024 = {
 // 요일 배열
 const WEEKDAYS = ['월', '화', '수', '목', '금', '토', '일'];
 
-// 페이지 로드 시 ���벤트 리스너 수정
+// 페이지 로드 시 이벤트 리스너 수정
 window.addEventListener('load', () => {
     console.log('Page loaded');
     const today = new Date();
@@ -130,7 +122,7 @@ function addTodo() {
                     <button class="icon-btn edit-btn" onclick="editTodo(this)" title="변경">
                         <i class="fas fa-edit"></i>
                     </button>
-                    <button class="icon-btn cancel-btn" onclick="toggleCancel(this)" title="취소">
+                    <button class="icon-btn cancel-btn" onclick="toggleCancel(this)" title="취���">
                         <i class="fas fa-ban"></i>
                     </button>
                     <button class="icon-btn delete-btn" onclick="deleteTodo(this)" title="삭제">
@@ -317,7 +309,7 @@ function saveTodos() {
     // 현재 선택된 날짜의 할 일 목록 저장
     todosByDate[selectedDateStr] = todos;
     
-    // localStorage에 전체 데이터 ��장
+    // localStorage에 전체 데이터 저장
     localStorage.setItem('todosByDate', JSON.stringify(todosByDate));
     
     // UI 업데이트
@@ -540,7 +532,7 @@ function updateWeeklyView(selectedDate) {
                 const smileIcon = tempDiv.querySelector('.smile-icon');
                 const isCompleted = smileIcon && smileIcon.textContent === '😊';
                 
-                // 체크박스 추가
+                // 체크박스 가
                 const checkbox = document.createElement('input');
                 checkbox.type = 'checkbox';
                 checkbox.className = 'weekly-checkbox';
@@ -658,7 +650,7 @@ function updateStats() {
                 <span class="achievement-icon">
                     ${stats.daily.completed >= stats.daily.total ? '🌟' : '🎯'}
                 </span>
-                <span>오늘의 목표</span>
+                <span>오늘의 표</span>
             </div>
         </div>
         <div class="stat-item">
@@ -694,7 +686,7 @@ function updateStats() {
     `;
 }
 
-// 같은 주인지 확인하는 헬퍼 함수
+// 같은 주인지 인하는 헬퍼 함수
 function isSameWeek(date1, date2) {
     const d1 = new Date(date1);
     const d2 = new Date(date2);
@@ -968,7 +960,7 @@ const Todo = {
     date: String,         // 날짜
     completed: Boolean,   // 완료 
     canceled: Boolean,    // 취소 여부
-    createdAt: Date,      // 생성일���
+    createdAt: Date,      // 생성일시
     updatedAt: Date       // 수정일시
 };
 
@@ -1084,27 +1076,13 @@ class CharacterSystem {
         this.maxExp = 100;
         this.character = '🤖';
         
-        // 레벨별 캐릭터와 칭찬 메시지
+        // 레벨별 캐릭터와 칭찬 메시지만 유지
         this.characters = {
             1: { emoji: '🤖', message: '시작이 반이야! 잘 할 수 있어!' },
             5: { emoji: '🦸‍♂️', message: '와! 영웅이 되었어!' },
             10: { emoji: '🧙‍♂️', message: '대단해! 마법사가 되었어!' },
             15: { emoji: '🦁', message: '용감한 사자가 되었구나!' },
             20: { emoji: '🐉', message: '전설의 드래곤이 되었어!' }
-        };
-        
-        // 레벨별 캐릭터 진화 단계 정의
-        this.evolutionStages = {
-            1: { emoji: '🥚', name: '알', message: '새로운 시작이야! 화이팅! 🌱' },
-            3: { emoji: '🐣', name: '병아리', message: '앗! 알에서 깨어났어! 🎉' },
-            5: { emoji: '🐥', name: '성장하는 병아리', message: '쑥쑥 자라나고 있어! 💪' },
-            7: { emoji: '🐤', name: '튼튼한 병아리', message: '더욱 튼튼해졌어! ⭐' },
-            10: { emoji: '🐔', name: '닭', message: '와! 멋진 닭이 되었어! 🌟' },
-            13: { emoji: '🦅', name: '독수리', message: '대단해! 하늘을 날 수 있게 되었어! ✨' },
-            15: { emoji: '🦚', name: '공작새', message: '와우! 아름다운 공작새가 되었어! 🎨' },
-            18: { emoji: '🦄', name: '유니콘', message: '믿을 수 없어! 전설의 유니콘이 되었어! 🌈' },
-            20: { emoji: '🐉', name: '드래곤', message: '축하해! 전설의 드래곤으로 진화했어! 🔥' },
-            25: { emoji: '✨🐉✨', name: '빛나는 드래곤', message: '최고의 경지에 도달했어! 넌 정말 대단해! 👑' }
         };
 
         this.loadProgress();
@@ -1125,31 +1103,11 @@ class CharacterSystem {
         this.exp = 0;
         this.maxExp = this.level * 100;
         
-        // 레벨업 시 진화 체크
-        const newStage = this.getCurrentEvolutionStage();
-        if (newStage) {
-            this.character = newStage.emoji;
-            this.showEvolutionAnimation();
-            this.showPraise(newStage.message);
-        } else {
-            this.showPraise(`레벨 ${this.level} 달성! 계속 힘내! 🎉`);
-        }
+        this.showEvolutionAnimation();
+        this.showPraise(`레벨 ${this.level} 달성! 계속 힘내! 🎉`);
         
         this.saveProgress();
         this.updateDisplay();
-    }
-
-    getCurrentEvolutionStage() {
-        // 현재 레벨에 해당하는 진화 단계 찾기
-        const stages = Object.entries(this.evolutionStages)
-            .sort(([a], [b]) => Number(b) - Number(a));
-        
-        for (const [level, stage] of stages) {
-            if (this.level >= Number(level)) {
-                return stage;
-            }
-        }
-        return this.evolutionStages[1]; // 기본 단계
     }
 
     showEvolutionAnimation() {
@@ -1157,19 +1115,15 @@ class CharacterSystem {
         characterEl.style.animation = 'none';
         characterEl.offsetHeight; // 리플로우 강제
         characterEl.style.animation = 'evolution 1.5s ease';
-        
-        // 진화 효과음 재생 (선택사항)
-        const evolutionSound = new Audio('evolution-sound.mp3'); // 효과음 파일 필요
-        evolutionSound.play().catch(() => {}); // 브라우저 정책상 자동 재생이 차단될 수 있음
     }
 
     updateDisplay() {
-        const stage = this.getCurrentEvolutionStage();
         const characterEl = document.getElementById('characterEmoji');
         const levelEl = document.getElementById('characterLevel');
         
-        characterEl.textContent = stage.emoji;
-        levelEl.textContent = `${this.level} (${stage.name})`;
+        // 레벨에 맞는 이미지 표시
+        characterEl.innerHTML = `<img src="images/${this.level}.webp" alt="브롤러 레벨 ${this.level}" class="brawler-image">`;
+        levelEl.textContent = `파워 ${this.level}`;
         
         document.getElementById('currentExp').textContent = this.exp;
         document.getElementById('maxExp').textContent = this.maxExp;
@@ -1198,13 +1152,12 @@ class CharacterSystem {
     removeExp(amount) {
         this.exp -= amount;
         if (this.exp < 0) {
-            // 현재 레벨이 1보다 크면 이전 레벨로 돌아감
             if (this.level > 1) {
                 this.level--;
                 this.maxExp = this.level * 100;
-                this.exp = this.maxExp + this.exp; // 음수인 exp를 이전 레벨의 경험치에서 차감
+                this.exp = this.maxExp + this.exp;
             } else {
-                this.exp = 0; // 레벨 1에서는 0 미만으로 내려가지 않음
+                this.exp = 0;
             }
         }
         this.saveProgress();

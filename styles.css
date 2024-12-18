@@ -1203,3 +1203,84 @@ h1, h2, h3 {
     transition: width 0.3s ease;
     box-shadow: 0 0 10px rgba(76, 175, 80, 0.5);
 }
+
+.brawler-emoji {
+    font-size: 48px;
+    display: inline-block;
+    filter: drop-shadow(2px 2px 2px rgba(0,0,0,0.3));
+    animation: float 2s ease-in-out infinite;
+}
+
+@keyframes float {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-5px);
+    }
+}
+
+.character-info {
+    background: linear-gradient(145deg, #2b2d42, #1a1b2e);
+    border: 2px solid #ffd700;
+    color: white;
+    padding: 20px;
+    border-radius: 15px;
+}
+
+.level-badge {
+    background: linear-gradient(45deg, #ffd700, #ffa500);
+    border: 2px solid #ffffff;
+    text-shadow: 1px 1px 1px rgba(0,0,0,0.3);
+}
+
+.exp-bar {
+    border: 2px solid #ffd700;
+    background: rgba(255,255,255,0.1);
+}
+
+.exp-progress {
+    background: linear-gradient(45deg, #00ff87, #60efff);
+    box-shadow: 0 0 10px rgba(96,239,255,0.5);
+}
+
+.praise-message {
+    color: #ffd700;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+    font-weight: bold;
+}
+
+.brawler-image {
+    width: 80px;  /* 이미지 크기 조정 */
+    height: 80px;
+    object-fit: contain;
+    filter: drop-shadow(2px 2px 2px rgba(0,0,0,0.3));
+    animation: float 2s ease-in-out infinite;
+}
+
+@keyframes float {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-5px);
+    }
+}
+
+.character-info {
+    background: linear-gradient(145deg, #2b2d42, #1a1b2e);
+    border: 2px solid #ffd700;
+    color: white;
+    padding: 20px;
+    border-radius: 15px;
+    text-align: center;
+}
+
+/* 이미지가 잘 보이도록 배경 어둡게 조정 */
+.character-avatar {
+    background: rgba(0,0,0,0.2);
+    border-radius: 50%;
+    padding: 10px;
+    margin-bottom: 10px;
+    display: inline-block;
+}
